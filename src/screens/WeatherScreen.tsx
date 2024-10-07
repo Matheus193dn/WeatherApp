@@ -5,9 +5,10 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useEffect } from "react";
+import type { PropsWithChildren } from "react";
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -15,7 +16,7 @@ import {
   Text,
   useColorScheme,
   View,
-} from 'react-native';
+} from "react-native";
 
 import {
   Colors,
@@ -23,14 +24,15 @@ import {
   Header,
   LearnMoreLinks,
   ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+} from "react-native/Libraries/NewAppScreen";
+import WeatherCityDetailScreen from "./WeatherCityDetailScreen";
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function Section({ children, title }: SectionProps): React.JSX.Element {
+  const isDarkMode = useColorScheme() === "dark";
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -39,7 +41,8 @@ function Section({children, title}: SectionProps): React.JSX.Element {
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
-        ]}>
+        ]}
+      >
         {title}
       </Text>
       <Text
@@ -48,7 +51,8 @@ function Section({children, title}: SectionProps): React.JSX.Element {
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
-        ]}>
+        ]}
+      >
         {children}
       </Text>
     </View>
@@ -56,9 +60,9 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function WeatherScreen(props: any): React.JSX.Element {
-  console.log('WeatherScreen-props: ', props);
-  const {children = {}} = props;
-  const isDarkMode = useColorScheme() === 'dark';
+  console.log("WeatherScreen-props: ", props);
+  const { children = {}, navigation = {} } = props;
+  const isDarkMode = useColorScheme() === "dark";
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -67,9 +71,9 @@ function WeatherScreen(props: any): React.JSX.Element {
   const fake_data = {
     lat: 51.509865,
     lon: -0.118092,
-    tz: '+01:00',
-    date: '2024-05-13',
-    units: 'metric',
+    tz: "+01:00",
+    date: "2024-05-13",
+    units: "metric",
     weather_overview: `The current weather is overcast with a 
  temperature of 16°C and a feels-like temperature of 16°C. 
  The wind speed is 4 meter/sec with gusts up to 6 meter/sec 
@@ -87,17 +91,19 @@ function WeatherScreen(props: any): React.JSX.Element {
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={isDarkMode ? "light-content" : "dark-content"}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
+        style={backgroundStyle}
+      >
         <Header />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
+          }}
+        >
           <Section title="Current location:">
             <Text>{`Lat: ${fake_data.lat} Long: ${fake_data.lon}`}</Text>
           </Section>
@@ -107,7 +113,11 @@ function WeatherScreen(props: any): React.JSX.Element {
           <Section title="Overview">
             <Text>{`${fake_data.weather_overview}`}</Text>
           </Section>
-          {children ? (
+          <Button
+            title="City Detail"
+            onPress={() => navigation?.push(WeatherCityDetailScreen)}
+          />
+          {children && Object.keys(children).length > 0 ? (
             <Section title="Props from host">{children}</Section>
           ) : (
             <></>
@@ -125,15 +135,15 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   highlight: {
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
 

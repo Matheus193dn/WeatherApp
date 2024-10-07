@@ -5,12 +5,12 @@
  * @format
  */
 
-import React from 'react';
-import WeatherScreen from './screens/WeatherScreen';
+import React from "react";
+import WeatherScreen from "./screens/WeatherScreen";
 
 function App(props: any): React.JSX.Element {
-  console.log('props: ', props);
-  return <WeatherScreen />;
+  console.log("App-props===: ", props);
+  return <WeatherScreen {...props} />;
 }
 
 export default App;
